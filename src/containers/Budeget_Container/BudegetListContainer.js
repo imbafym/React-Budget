@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { show_data } from '../../actions';
 import ListItem from './ListItem';
 class BudgetListContainer extends Component {
 
@@ -13,8 +15,9 @@ class BudgetListContainer extends Component {
             exp: [],
             totalInc: 0,
             totalExp: 0,
-            budget: this.totalInc - this.totalExp,
-            percentage: 0
+            budget: 0,
+            percentage: 0,
+            totalPercentage: 0
         }
         this.onInputChange = this.onInputChange.bind(this);
         this.onSelectedChange = this.onSelectedChange.bind(this);
@@ -22,8 +25,12 @@ class BudgetListContainer extends Component {
         this.onDelete = this.onDelete.bind(this);
     }
 
+    componentDidUpdate(){
+        // console.log(JSON.stringify(this.state) + ' === this is the state in compnentDidUpdate')
+        this.props.show_data(this.state);
+    }
+   
     onDelete(item) {
-        // const itemId = event.target.parentNode.parentNode.parentNode.parentNode.id;
         const type = item.type;
         const budgets = type === 'inc' ? this.state.inc : this.state.exp;
         const dataRemoved = budgets.filter((el) => {
@@ -34,6 +41,7 @@ class BudgetListContainer extends Component {
             text: '',
             number: '',
             totalInc: this.state.totalInc - item.number
+
         }
         ) : this.setState({
             'exp': dataRemoved,
@@ -49,12 +57,10 @@ class BudgetListContainer extends Component {
         this.setState({
             [target.type]: target.value
         })
-        // console.log(this.state);
     }
     onSelectedChange(event) {
         const target = event.target;
         this.setState({ type: target.value })
-        // console.log(this.state);
     }
 
     onSubmit(event) {
@@ -66,24 +72,39 @@ class BudgetListContainer extends Component {
             number: this.state.number,
             type: this.state.type
         };
-        const totalNumber = this.state.type === 'inc'? this.state.totalInc + parseInt(item.number)  : this.state.totalExp + parseInt(item.number)  ;
-        console.log(`${totalNumber} are here...`);
-        this.state.type === 'inc' ? this.setState({
+        const totalNumber = this.state.type === 'inc' ? this.state.totalInc + parseInt(item.number) : this.state.totalExp + parseInt(item.number);
+       
+        
+        const var1 = this.state.type === 'inc' ? {
             'inc': [...this.state.inc, item],
             text: '',
             number: '',
             totalInc: totalNumber
         }
-        ) : this.setState({
+        : {
             'exp': [...this.state.exp, item],
             text: '',
             number: '',
             totalExp: totalNumber
-        }
-        );
-        this.calculatePercentage();
-        // console.log('this is button');
+        };
+       
+        const per = this.calculatePercentage();
+        const budegtPer = this.calculateBudget();
         
+        this.func(var1);
+      
+        console.log(this.state);
+
+    }
+    setStateAsunc(nextState){  
+        return new Promise(resolve => {
+          this.setState(nextState, resolve);
+        });
+      }
+    async func(var1){
+       
+        await this.setStateAsunc(var1).then(this.calculatePercentage()).then(this.calculateBudget());
+        // await this.setStateAsunc(var2);
     }
 
     calculateTotal(type) {
@@ -94,32 +115,40 @@ class BudgetListContainer extends Component {
                 sum += aItem.number;
             })
         }
-        type === 'inc' ? this.setState({ inc: sum }) : this.setState({ exp : sum });
+        type === 'inc' ? this.setState({ inc: sum }) : this.setState({ exp: sum });
     }
- 
 
-    calculatePercentage(){
+
+    calculateBudget() {
+        let sum = 0;
+        let per = 0;
+        sum = this.state.totalInc - this.state.totalExp;
+        if (this.state.totalInc > 0) {
+            per = Math.round((this.state.totalExp / this.state.totalInc) * 100);
+        } else {
+            per = -1;
+        }
+        console.log(this.state.totalInc+' this is sum'+ sum  )
+        this.setState({budget : sum});
+       
+    }
+    calculatePercentage() {
         let percentage = 0;
         // this.calculateTotal('inc');
         // this.calculateTotal('exp');
-        if(this.state.totalInc > 0){
-            percentage = Math.round((this.state.totalExp/this.state.totalInc) * 100);
-            // console.log(this.state.totalExp + " is total exp");
-            // console.log(this.state.totalInc + " is total inc");
-            
-            // console.log(percentage + " is not -1");
-        }else{
+        if (this.state.totalInc > 0) {
+            percentage = Math.round((this.state.totalExp / this.state.totalInc) * 100);
+        } else {
             percentage = -1;
-            // console.log(percentage + " is  -1");
         }
-        this.setState({percentage: this.percentage});
+        this.setState({percentage : percentage});
+        
     }
 
 
     renderList(type) {
-        // console.log('render list');
         const items = type === 'inc' ? this.state.inc : this.state.exp;
-        
+
         const result = items.map((aItem, index) => {
             return (
                 <div className="item clearfix" id="income-0" key={index}>
@@ -134,18 +163,8 @@ class BudgetListContainer extends Component {
         const items = this.state.type === 'inc' ? this.state.inc : this.state.exp;
         const { text, number } = this.state;
         const enabled = text && number;
-        // const enabled = ()=> {
-        //     const firstCondition = text && number;
-        //     const secCondition = items.map((aItem,index)=>{        
-        //         if(aItem.text=== text && aItem.number === number){
-        //             return false;
-        //         }
-        //     });
-        //     console.log(`first condition is ${firstCondition}`);
-        //     console.log(`second condition is ${secCondition}`);
-        //     return firstCondition&&secCondition;
-        // };
-        // console.log(enabled());
+       
+        
         return (
 
             <div className="bottom">
@@ -185,8 +204,6 @@ class BudgetListContainer extends Component {
                 </div>
             </div>
 
-
-
         );
     }
 
@@ -198,4 +215,4 @@ class BudgetListContainer extends Component {
 }
 
 
-export default BudgetListContainer;
+export default connect(null, { show_data })(BudgetListContainer);
