@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { show_data } from '../../actions';
-import ListItem from './ListItem';
+import ListItem from '../../components/ListItem';
 class BudgetListContainer extends Component {
 
     constructor(props) {
