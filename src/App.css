@@ -26,3 +26,23 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.footer-style {
+  background-color: "#F8F8F8";
+  border-Top: "1px solid #E7E7E7";
+  text-Align: "center";
+  padding: "20px";
+  position: "fixed";
+  left: "0";
+  bottom: "0";
+  height: "60px";
+  width: "100%";
+}
+
+.phantom  {
+display: 'block';
+padding: '20px';
+height: '60px';
+width: '100%';
+}
+
