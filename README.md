@@ -6,7 +6,7 @@ Built with React + Redux and React Router
 
 ## How to Run
 The application is live on Firebase:
-https://online-budget-demo.firebaseapp.com/budget
+https://online-budget-demo.firebaseapp.com
 
 ### Run the App locally
 Clone the code and install npm. Then
@@ -15,12 +15,13 @@ npm start
 ```
 
 ## URL Structure
-There are 2 different urls in this App:
+There are 3 different urls in this App:
 
 | URL | Description |
 |----|-------------------------------------------|
-| / | The root page for view user's own profile |
+| / | The root page|
 | /login | The login page |
+| /budget | The budget page |
 
 
 ## Account
