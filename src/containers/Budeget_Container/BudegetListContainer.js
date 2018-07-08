@@ -178,7 +178,8 @@ class BudgetListContainer extends Component {
 
                         <input type="text" className="add__description" value={this.state.text} placeholder={"Add description"} onChange={this.onInputChange} />
                         <input type="number" className="add__value" value={this.state.number} placeholder="Value" onChange={this.onInputChange} />
-                        <button className="add__btn" disabled={!enabled} onClick={this.onSubmit}><i className="ion-ios-checkmark-outline"></i></button>
+                        <button className="add__btn" disabled={!enabled} onClick={this.onSubmit}><i className="ion-ios-checkmark-outline"></i>
+                        <i class="icon ion-md-checkmark"></i></button>
 
                     </div>
                 </div>

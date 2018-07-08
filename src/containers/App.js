@@ -36,7 +36,7 @@ class App extends Component {
 
         const loginLink = this.state.token ? (
             <LinkContainer to="/">
-                <NavItem onClick={() => this.setState({ token: true })}>Logout</NavItem>
+                <NavItem onClick={() => this.setState({ token: '' })}>Logout</NavItem>
             </LinkContainer>
         ) : (
                 <LinkContainer to="/login">
@@ -47,15 +47,13 @@ class App extends Component {
             <div>
                 <BrowserRouter>
                     <div>
-                        <Navbar inverse collapseOnSelect>
-                            {/* <div className="left"> */}
+                        {/* <Navbar inverse collapseOnSelect>
                             <Navbar.Header>
                                 <Navbar.Brand>
                                     Online Budget
                                 </Navbar.Brand>
                                 <Navbar.Toggle />
                             </Navbar.Header>
-                            {/* </div> */}
                             <Navbar.Collapse>
                                 <Nav>
                                     <LinkContainer to="/budget">
@@ -66,24 +64,24 @@ class App extends Component {
                                     {loginLink}
                                 </Nav>
                             </Navbar.Collapse>
-                        </Navbar>
+                        </Navbar> */}
 
                         <Switch>
-                            <PublicRoute exact path="/" token={this.state.token} componentRender={{ component: Main_Container }} />
+                            <PublicRoute exact path="/" token={this.state.token} componentRender={{ component: Budeget_Container }} />
                             <PublicRoute path="/login" token={this.state.token} componentRender={{
                                 component: Login,
                                 onTokenChanged: this.onTokenChanged
                             }} />
                             <AuthRoute exact path="/budget" token={this.state.token} componentRender={{ component: Budeget_Container }} />
                         </Switch>
-                        <div className="phantom">
+                        {/* <div className="phantom">
                             <div className="footer-style">
                                 <div>&copy; {new Date().getFullYear()} Yiming Fan</div>
                                 <br />
                                 <div>Powered by yiming.fan1068@gmail.com</div>
 
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                 </BrowserRouter>
