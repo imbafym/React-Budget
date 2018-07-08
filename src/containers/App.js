@@ -74,14 +74,7 @@ class App extends Component {
                             }} />
                             <AuthRoute exact path="/budget" token={this.state.token} componentRender={{ component: Budeget_Container }} />
                         </Switch>
-                        {/* <div className="phantom">
-                            <div className="footer-style">
-                                <div>&copy; {new Date().getFullYear()} Yiming Fan</div>
-                                <br />
-                                <div>Powered by yiming.fan1068@gmail.com</div>
-
-                            </div>
-                        </div> */}
+                       
                     </div>
 
                 </BrowserRouter>
